@@ -1,15 +1,28 @@
 const std = @import("std");
 
 const lexer: type = struct {
-    input: [*]u8,
-    text_length: u64,
+    input: [*]const u8,
+    text_length: usize,
     position: usize,
+    read_position: usize,
 };
 
+const Token:type = struct{
+    
+}
+
+fn lex(text: []const u8) []Token {}
+
+
 pub fn main() !void {
-    const text = "meow";
-    const index = 3;
-    std.debug.print("{c}", .{text[index]});
+    const text = "mewo meow meow meow";
+    const lexed: []const Token = lex(text);
+
+    const parsed = parser(lexed);
+
+    const result = convert(parsed);
+
+    std.debug.print(result);
 }
 
 test "simple test" {}
