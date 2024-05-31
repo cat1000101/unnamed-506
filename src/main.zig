@@ -1,28 +1,24 @@
 const std = @import("std");
+const print = std.debug.print;
 
-const lexer: type = struct {
-    input: [*]const u8,
-    text_length: usize,
-    position: usize,
-    read_position: usize,
+const Circle: type = struct {
+    radius: f32 = 10,
+    velocity: f32 = 10,
+    acceleration: f32 = 5,
+    position: @Vector(2, f64) = @Vector(2, f64){ 100, 100 },
+
+    pub fn init(radius: f32, velocity: f32, acceleration: f32, position: @Vector(2, f64)) Circle {
+        return Circle{
+            .radius = radius,
+            .velocity = velocity,
+            .acceleration = acceleration,
+            .position = position,
+        };
+    }
 };
 
-const Token:type = struct{
-    
-}
-
-fn lex(text: []const u8) []Token {}
-
-
 pub fn main() !void {
-    const text = "mewo meow meow meow";
-    const lexed: []const Token = lex(text);
-
-    const parsed = parser(lexed);
-
-    const result = convert(parsed);
-
-    std.debug.print(result);
+    print("meow");
 }
 
 test "simple test" {}
