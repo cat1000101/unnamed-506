@@ -1,6 +1,4 @@
 const std = @import("std");
-var pcg = std.Random.Pcg.init(69);
-const random = pcg.random();
 const print = std.debug.print;
 const rl = @import("raylib");
 
@@ -84,6 +82,8 @@ pub fn main() anyerror!void {
     const screenWidth = 800;
     const screenHeight = 450;
     const screenLengths = @Vector(2, f64){ screenWidth, screenHeight };
+    var pcg = std.Random.Pcg.init(69);
+    const random = pcg.random();
 
     rl.initWindow(screenWidth, screenHeight, "raylib-zig [core] example - basic window");
     defer rl.closeWindow(); // Close window and OpenGL context
@@ -93,8 +93,18 @@ pub fn main() anyerror!void {
     var circles: [numCircles]Circle = undefined;
 
     for (0..numCircles) |i| {
-        circles[i] = Circle.init(@Vector(2, f64){ random.float(f64) * @as(f64, screenWidth), random.float(f64) * @as(f64, screenHeight) }, 10.0, rl.Color.blue, 1, @Vector(2, f64){ random.float(f64) * @as(f64, screenWidth), random.float(f64) * @as(f64, screenHeight) }, @Vector(2, f64){ 0.0, gravity });
+        const initialPosition = @Vector(2, f64){
+            (random.float(f64) + 1) * @as(f64, screenWidth / 2),
+            (random.float(f64) + 1) * @as(f64, screenHeight / 2),
+        };
+        const initialVelocity = @Vector(2, f64){
+            (random.float(f64)) * @as(f64, 100),
+            (random.float(f64)) * @as(f64, 100),
+        };
+        const initialAccelaration = @Vector(2, f64){ 0.0, gravity };
+        circles[i] = Circle.init(initialPosition, 10.0, rl.Color.blue, 1, initialVelocity, initialAccelaration);
     }
+
     circles[1].position[0] = 200;
     circles[1].velocity[0] = -100;
 
@@ -121,7 +131,9 @@ pub fn main() anyerror!void {
 
         rl.clearBackground(rl.Color.white);
         for (circles) |circle| {
-            rl.drawCircle(@intFromFloat(circle.position[0]), @intFromFloat(circle.position[1]), circle.radius, circle.color);
+            const intX: i32 = @intFromFloat(circle.position[0]);
+            const intY: i32 = @intFromFloat(circle.position[1]);
+            rl.drawCircle(intX, intY, circle.radius, circle.color);
         }
 
         //----------------------------------------------------------------------------------
