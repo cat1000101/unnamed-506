@@ -37,7 +37,7 @@ const Circle = struct {
         self.acceleration = acceleration;
     }
 
-    pub fn checkCollision(self: *Circle, screen: @Vector(2, f64)) void {
+    pub fn checkCollisionBorder(self: *Circle, screen: @Vector(2, f64)) void {
         if ((self.position[1] + @as(f64, self.radius)) <= screen[1]) self.velocity[1] = -self.velocity[1];
         if ((self.position[1] - @as(f64, self.radius)) >= 0) self.velocity[1] = -self.velocity[1];
         if ((self.position[0] + @as(f64, self.radius)) <= screen[0]) self.velocity[0] = -self.velocity[0];
@@ -119,7 +119,7 @@ pub fn main() anyerror!void {
         for (0..numCircles) |i| {
             circles[i].newVelocity(dt);
             circles[i].newPosition(dt);
-            circles[i].checkCollision(screenLengths);
+            circles[i].checkCollisionBorder(screenLengths);
             for (i..numCircles) |j| {
                 if (i == j) continue;
                 circles[i].twoCirclesCollision(&circles[j]);
