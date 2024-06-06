@@ -82,8 +82,8 @@ pub fn main() anyerror!void {
     const screenWidth = 800;
     const screenHeight = 450;
     const screenLengths = @Vector(2, f64){ screenWidth, screenHeight };
-    var pcg = std.Random.Pcg.init(69);
-    const random = pcg.random();
+    var defaultPrng = std.Random.DefaultPrng.init(17);
+    const random = defaultPrng.random();
 
     rl.initWindow(screenWidth, screenHeight, "raylib-zig [core] example - basic window");
     defer rl.closeWindow(); // Close window and OpenGL context
@@ -94,8 +94,8 @@ pub fn main() anyerror!void {
 
     for (0..numCircles) |i| {
         const initialPosition = @Vector(2, f64){
-            (random.float(f64) + 1) * @as(f64, screenWidth / 2),
-            (random.float(f64) + 1) * @as(f64, screenHeight / 2),
+            (random.float(f64)) * @as(f64, screenWidth),
+            (random.float(f64)) * @as(f64, screenHeight),
         };
         const initialVelocity = @Vector(2, f64){
             (random.float(f64)) * @as(f64, 100),
@@ -104,10 +104,6 @@ pub fn main() anyerror!void {
         const initialAccelaration = @Vector(2, f64){ 0.0, gravity };
         circles[i] = Circle.init(initialPosition, 10.0, rl.Color.blue, 1, initialVelocity, initialAccelaration);
     }
-
-    circles[1].position[0] = 200;
-    circles[1].velocity[0] = -100;
-
     var last_time = rl.getTime();
     var dt: f64 = 0;
     //--------------------------------------------------------------------------------------
@@ -125,6 +121,7 @@ pub fn main() anyerror!void {
             circles[i].newPosition(dt);
             circles[i].checkCollision(screenLengths);
             for (i..numCircles) |j| {
+                if (i == j) continue;
                 circles[i].twoCirclesCollision(&circles[j]);
             }
         }
