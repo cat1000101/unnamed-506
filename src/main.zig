@@ -109,6 +109,11 @@ pub fn main() anyerror!void {
     //--------------------------------------------------------------------------------------
 
     // Main game loop
+    // TODO: force between circles? atraction
+    // TODO: springs between circles
+    // TODO: make a soft body with springs
+    // TODO: make the circles collide with the walls better (https://www.youtube.com/watch?v=eED4bSkYCB8&list=PL5AnY90COM7Dh9XNY-OHvlJODRYk_6swz)
+    // make costum collition with rectengles
     while (!rl.windowShouldClose()) { // Detect window close button or ESC key
 
         dt = rl.getTime() - last_time;
